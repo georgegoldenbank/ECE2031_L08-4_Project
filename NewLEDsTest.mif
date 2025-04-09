@@ -5,8 +5,28 @@ ADDRESS_RADIX=HEX;
 DATA_RADIX=HEX;
 
 CONTENT BEGIN
-0000: 9000; -- 	IN		Switches
+0000: 0814; -- 	LOAD	TestVal
 0001: 9820; -- 	OUT		NewLEDs
-0002: 2800; -- 	JUMP	Main
-[0003..07FF] : 0000; -- [empty memory]
+0002: 8004; -- 	CALL	OuterLoop
+0003: 2800; -- 	JUMP	Main
+0004: 0815; -- 	LOAD	OuterCounter
+0005: 400F; -- 	JZERO	End
+0006: 6FFF; -- 	ADDI	-1
+0007: 1015; -- 	STORE	OuterCounter
+0008: BBE8; -- 	LOADI	1000
+0009: 1016; -- 	STORE	InnerCounter
+000A: 0816; -- 	LOAD	InnerCounter
+000B: 4004; -- 	JZERO	OuterLoop
+000C: 6FFF; -- 	ADDI	-1
+000D: 1016; -- 	STORE	InnerCounter
+000E: 280A; -- 	JUMP	InnerLoop
+000F: BBE8; -- 	LOADI	1000
+0010: 1015; -- 	STORE	OuterCounter
+0011: BBE8; -- 	LOADI	1000
+0012: 1016; -- 	STORE	InnerCounter
+0013: 8800; -- 	RETURN
+0014: 0402; -- TestVal: DW	&H402
+0015: 03E8; -- OuterCounter: DW	1000
+0016: 03E8; -- InnerCounter: DW	1000
+[0017..07FF] : 0000; -- [empty memory]
 END;

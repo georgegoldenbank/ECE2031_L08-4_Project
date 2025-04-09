@@ -26,7 +26,6 @@ END LEDController;
 
 ARCHITECTURE a OF LEDController IS
 TYPE MODE_TYPE IS (PWM, TOGGLE);
-
 SIGNAL MODE			: MODE_TYPE;
 
 -- PWM signals
@@ -34,6 +33,10 @@ SIGNAL BRIGHTNESS	: STD_LOGIC_VECTOR (1 DOWNTO 0); -- duty cycle selection
 SIGNAL GAMMA_LENGTH		: STD_LOGIC_VECTOR (7 DOWNTO 0); -- how many clock cycles an LED should be on for PWM
 SIGNAL COUNT		: STD_LOGIC_VECTOR (7 DOWNTO 0); -- keeps track of rising clock edges elapsed
 SIGNAL ENABLE		: STD_LOGIC_VECTOR (7 DOWNTO 0); -- whether or not an LED should get PWM'ed
+
+-- TOGGLE signals
+SIGNAL LED_STATE : std_logic_vector(9 downto 0) := "0000000000";
+SIGNAL COMMANDED : STD_LOGIC := '0';
 
 BEGIN
 
@@ -48,7 +51,8 @@ BEGIN
 					ENABLE <= IO_DATA(7 DOWNTO 0);
 				ELSIF IO_DATA(11 DOWNTO 10) = "01" THEN
 					MODE <= TOGGLE;
-					-- stuff for 2nd feature
+					LED_STATE <= LED_STATE XOR IO_DATA(9 DOWNTO 0);
+					COMMANDED <= COMMANDED XOR '1';
 				END IF;
 			END IF;
 	END PROCESS;
@@ -99,21 +103,28 @@ BEGIN
 							  x"2C" WHEN "10",
 							  x"C7" WHEN OTHERS;
 	
-	-- Here the actual PWM happens if the switch for that LED is enabled/up
-	PROCESS(RESETN, COUNT, ENABLE, GAMMA_LENGTH)
+	-- This process looks at the selected mode and sets the outputs to the LEDs
+	-- An output can only be driven from 1 process so remember that!
+	-- For PWM mode, PWM happens if the switch for that LED is enabled/up
+	-- For TOGGLE mode, the result from the XOR operation is applied
+	PROCESS(RESETN, COUNT, ENABLE, GAMMA_LENGTH, COMMANDED)
 		BEGIN
 			IF RESETN = '0' THEN
 				LED <= "0000000000";
-			ELSIF MODE = PWM THEN
-				FOR c IN 0 to 7 LOOP
-					IF ENABLE(c) = '1' AND COUNT < GAMMA_LENGTH THEN
-						LED(c) <= '1';
-					ELSE LED(c) <= '0';
-					END IF;
-				END LOOP;
-				-- Leave LEDs for duty cycle selection switches off
-				LED(8) <= '0';
-				LED(9) <= '0';
+			ELSE
+				IF MODE = PWM THEN
+					FOR c IN 0 to 7 LOOP
+						IF ENABLE(c) = '1' AND COUNT < GAMMA_LENGTH THEN
+							LED(c) <= '1';
+						ELSE LED(c) <= '0';
+						END IF;
+					END LOOP;
+					-- Leave LEDs for duty cycle selection switches off
+					LED(8) <= '0';
+					LED(9) <= '0';
+				ELSIF MODE = TOGGLE THEN
+					LED <= LED_STATE;
+				END IF;
 			END IF;
 	END PROCESS;
 	
