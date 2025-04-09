@@ -32,26 +32,50 @@ SIGNAL COUNT		: STD_LOGIC_VECTOR (7 DOWNTO 0); -- keeps track of rising clock ed
 SIGNAL ENABLE		: STD_LOGIC_VECTOR (7 DOWNTO 0); -- whether or not an LED should get PWM'ed
 
 BEGIN
-	-- Here the count signal is updated every clock cycle, which is used to know when to
-	-- change the value of an enabled LED.
+
+	PROCESS(CS, WRITE_EN, RESETN)
+		BEGIN
+			IF RESETN = '0' THEN
+				ENABLE <= "00000000";
+			ELSIF CS = '1' AND WRITE_EN = '1' THEN
+				BRIGHTNESS <= IO_DATA(9 DOWNTO 8);
+				ENABLE <= IO_DATA(7 DOWNTO 0);
+			END IF;
+	END PROCESS;
+	
+	-- Update count variable for PWM feature
 	PROCESS(CLOCK, RESETN)
 		BEGIN
 			IF RESETN = '0' THEN
 				COUNT <= x"00";
-				ENABLE <= "00000000";
 			ELSIF RISING_EDGE(CLOCK) THEN
-				IF CS = '1' AND WRITE_EN = '1' THEN
-					ENABLE <= IO_DATA(7 DOWNTO 0);
-					BRIGHTNESS <= IO_DATA(9 DOWNTO 8);
-				END IF;
-				
 				COUNT <= COUNT + 1;
-				
-				IF COUNT = x"C7" then -- full period has passed
-					COUNT <= X"00";	
+				IF COUNT = x"C7" THEN -- full period has passed
+					COUNT <= X"00";
 				END IF;
 			END IF;
 	END PROCESS;
+	
+	-- Here the count signal is updated every clock cycle, which is used to know when to
+	-- change the value of an enabled LED.
+--	PROCESS(CLOCK, RESETN)
+--		BEGIN
+--			IF RESETN = '0' THEN
+--				COUNT <= x"00";
+--				ENABLE <= "00000000";
+--			ELSIF RISING_EDGE(CLOCK) THEN
+--				IF CS = '1' AND WRITE_EN = '1' THEN
+--					ENABLE <= IO_DATA(7 DOWNTO 0);
+--					BRIGHTNESS <= IO_DATA(9 DOWNTO 8);
+--				END IF;
+--				
+--				COUNT <= COUNT + 1;
+--				
+--				IF COUNT = x"C7" then -- full period has passed
+--					COUNT <= X"00";	
+--				END IF;
+--			END IF;
+--	END PROCESS;
 	 
 	-- Here the constant is selected that determines how many clock cycles out of a
 	-- 200 clock cycle period an enabled LED stays on for. The amount of clock cycles
