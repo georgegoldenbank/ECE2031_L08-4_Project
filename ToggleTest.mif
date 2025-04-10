@@ -1,0 +1,36 @@
+WIDTH=16;
+DEPTH=2048;
+
+ADDRESS_RADIX=HEX;
+DATA_RADIX=HEX;
+
+CONTENT BEGIN
+0000: 0817; -- 	LOAD	EvenToggle
+0001: 9820; -- 	OUT		NewLEDs ; Toggles LEDS 0, 2, 4, 6, 8
+0002: 8007; -- 	CALL	OuterLoop
+0003: 0818; -- 	LOAD	OddToggle
+0004: 9820; -- 	OUT		NewLEDs ; Toggles LEDS 1, 3, 5, 7, 9
+0005: 8007; -- 	CALL	OuterLoop
+0006: 2800; -- 	JUMP	Main
+0007: 0819; -- 	LOAD	OuterCounter
+0008: 4012; -- 	JZERO	End
+0009: 6FFF; -- 	ADDI	-1
+000A: 1019; -- 	STORE	OuterCounter
+000B: BBE8; -- 	LOADI	1000
+000C: 101A; -- 	STORE	InnerCounter
+000D: 081A; -- 	LOAD	InnerCounter
+000E: 4007; -- 	JZERO	OuterLoop
+000F: 6FFF; -- 	ADDI	-1
+0010: 101A; -- 	STORE	InnerCounter
+0011: 280D; -- 	JUMP	InnerLoop
+0012: BBE8; -- 	LOADI	1000
+0013: 1019; -- 	STORE	OuterCounter
+0014: BBE8; -- 	LOADI	1000
+0015: 101A; -- 	STORE	InnerCounter
+0016: 8800; -- 	RETURN
+0017: 0555; -- EvenToggle: DW &H555
+0018: 06AA; -- OddToggle: DW &H6AA
+0019: 03E8; -- OuterCounter: DW	1000
+001A: 03E8; -- InnerCounter: DW	1000
+[001B..07FF] : 0000; -- [empty memory]
+END;

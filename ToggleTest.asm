@@ -1,28 +1,20 @@
 ORG 0
 Main:
-	LOAD	TestVal
-	OUT		NewLEDs
+	LOAD	EvenToggle
+	OUT		NewLEDs ; Toggles LEDS 0, 2, 4, 6, 8
+	CALL	OuterLoop
+	LOAD	OddToggle
+	OUT		NewLEDs ; Toggles LEDS 1, 3, 5, 7, 9
 	CALL	OuterLoop
 	JUMP	Main
 
-
-
-SingleLoop:
-	LOAD	SingleCounter
-	JZERO	SingleEnd
-	ADDI	-1
-	STORE	SingleCounter
-	JUMP	SingleLoop
-	
-SingleEnd:
-	LOAD	SingleCounterCopy
-	STORE	SingleCounter
-	RETURN
-
+; Because of the restriction of 16 bit registers
+; a single loop to decrement a value as a delay is not sufficient
+; so a nested loop is used to create a larger delay on the
+; order of seconds.
 OuterLoop:
 	LOAD	OuterCounter
 	JZERO	End
-	; proceed to InnerLoop cuz we got stuff to do
 	ADDI	-1
 	STORE	OuterCounter
 	LOADI	1000
@@ -43,9 +35,8 @@ End:
 	RETURN
 	
 ; IO address constants
-TestVal: DW	&H405
-SingleCounter: DW	32000
-SingleCounterCopy: DW 32000
+EvenToggle: DW &H555
+OddToggle: DW &H6AA
 OuterCounter: DW	1000
 InnerCounter: DW	1000
 Switches:  EQU 000
