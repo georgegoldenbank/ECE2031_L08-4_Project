@@ -496,7 +496,7 @@ https://fpgasoftware.intel.com/eula.
 	)
 )
 (symbol
-	(rect 304 248 512 456)
+	(rect 296 248 504 456)
 	(text "SCOMP" (rect 5 0 43 12)(font "Arial" ))
 	(text "inst" (rect 8 192 25 204)(font "Arial" ))
 	(port
@@ -888,48 +888,6 @@ https://fpgasoftware.intel.com/eula.
 	(pt 1088 120)
 )
 (connector
-	(text "resetn" (rect 234 280 263 297)(font "Intel Clear" ))
-	(pt 304 296)
-	(pt 224 296)
-)
-(connector
-	(text "clk_12MHz" (rect 234 264 287 281)(font "Intel Clear" ))
-	(pt 224 280)
-	(pt 304 280)
-)
-(connector
-	(text "0,0,0,0" (rect 234 296 264 313)(font "Intel Clear" ))
-	(pt 304 312)
-	(pt 224 312)
-	(bus)
-)
-(connector
-	(text "IO_WRITE" (rect 546 264 594 281)(font "Intel Clear" ))
-	(pt 536 280)
-	(pt 624 280)
-)
-(connector
-	(pt 512 280)
-	(pt 536 280)
-)
-(connector
-	(text "IO_CYCLE" (rect 530 280 579 297)(font "Intel Clear" ))
-	(pt 512 296)
-	(pt 616 296)
-)
-(connector
-	(text "IO_ADDR[10..0]" (rect 530 296 604 313)(font "Intel Clear" ))
-	(pt 512 312)
-	(pt 616 312)
-	(bus)
-)
-(connector
-	(text "IO_DATA[15..0]" (rect 530 312 603 329)(font "Intel Clear" ))
-	(pt 512 328)
-	(pt 616 328)
-	(bus)
-)
-(connector
 	(text "SW[9..0]" (rect 394 632 434 649)(font "Intel Clear" ))
 	(pt 384 648)
 	(pt 448 648)
@@ -1068,13 +1026,55 @@ https://fpgasoftware.intel.com/eula.
 	(pt 696 728)
 	(pt 776 728)
 )
+(connector
+	(text "resetn" (rect 226 280 255 297)(font "Intel Clear" ))
+	(pt 296 296)
+	(pt 216 296)
+)
+(connector
+	(text "clk_12MHz" (rect 226 264 279 281)(font "Intel Clear" ))
+	(pt 216 280)
+	(pt 296 280)
+)
+(connector
+	(text "0,0,0,0" (rect 226 296 256 313)(font "Intel Clear" ))
+	(pt 296 312)
+	(pt 216 312)
+	(bus)
+)
+(connector
+	(text "IO_WRITE" (rect 546 264 594 281)(font "Intel Clear" ))
+	(pt 536 280)
+	(pt 624 280)
+)
+(connector
+	(pt 504 280)
+	(pt 536 280)
+)
+(connector
+	(text "IO_CYCLE" (rect 522 280 571 297)(font "Intel Clear" ))
+	(pt 504 296)
+	(pt 608 296)
+)
+(connector
+	(text "IO_ADDR[10..0]" (rect 522 296 596 313)(font "Intel Clear" ))
+	(pt 504 312)
+	(pt 608 312)
+	(bus)
+)
+(connector
+	(text "IO_DATA[15..0]" (rect 522 312 595 329)(font "Intel Clear" ))
+	(pt 504 328)
+	(pt 608 328)
+	(bus)
+)
 (junction (pt 536 280))
 (text "The daughterboard test points." (rect 1264 832 1446 851)(font "Intel Clear" (font_size 8)))
 (text "Can be useful for testing using the oscilloscope." (rect 1264 856 1541 875)(font "Intel Clear" (font_size 8)))
 (title_block
 	(rect 1112 1264 1480 1384)
 	(section (rect 0 24 368 48)(text "COMPANY" (rect 2 0 57 12)(font "Arial" ))(text "GaTech DDL" (rect 56 2 170 20)(font "Arial" (font_size 12)))(border))
-	(section (rect 0 96 240 120)(text "DATE" (rect 2 0 30 12)(font "Arial" ))(text "Wed Apr 09 12:32:07 2025" (rect 56 3 238 19)(font "Arial" (font_size 10)))(date)(border))
+	(section (rect 0 96 240 120)(text "DATE" (rect 2 0 30 12)(font "Arial" ))(text "Thu Apr 10 13:20:07 2025" (rect 56 3 231 19)(font "Arial" (font_size 10)))(date)(border))
 	(section (rect 0 48 368 72)(text "DESIGNER" (rect 2 0 59 12)(font "Arial" ))(text "Kevin Johnson, Tom Collins" (rect 56 2 286 20)(font "Arial" (font_size 12)))(border))
 	(section (rect 0 72 280 96)(text "NUMBER" (rect 2 0 49 12)(font "Arial" ))(text "1.00" (rect 56 1 85 17)(font "Arial" (font_size 10)))(border))
 	(section (rect 310 96 368 120)(text "OF" (rect 10 0 25 12)(font "Arial" ))(text "1" (rect 34 4 42 20)(font "Arial" (font_size 10))))
