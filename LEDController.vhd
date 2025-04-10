@@ -36,23 +36,23 @@ SIGNAL ENABLE		: STD_LOGIC_VECTOR (7 DOWNTO 0); -- whether or not an LED should 
 
 -- TOGGLE signals
 SIGNAL LED_STATE : std_logic_vector(9 downto 0) := "0000000000";
-SIGNAL COMMANDED : STD_LOGIC := '0';
 
 BEGIN
 
-	PROCESS(CS, WRITE_EN, RESETN)
+	PROCESS(CS, CLOCK, WRITE_EN, RESETN)
 		BEGIN
 			IF RESETN = '0' THEN
 				ENABLE <= "00000000";
-			ELSIF CS = '1' AND WRITE_EN = '1' THEN
-				IF IO_DATA(11 DOWNTO 10) = "00" THEN
+				LED_STATE <= "0000000000";
+				MODE <= TOGGLE;
+			ELSIF RISING_EDGE(CLOCK) AND CS = '1' AND WRITE_EN = '1' THEN
+				IF IO_DATA(10) = '0' THEN
 					MODE <= PWM;
 					BRIGHTNESS <= IO_DATA(9 DOWNTO 8);
 					ENABLE <= IO_DATA(7 DOWNTO 0);
-				ELSIF IO_DATA(11 DOWNTO 10) = "01" THEN
+				ELSIF IO_DATA(10) = '1' THEN
 					MODE <= TOGGLE;
 					LED_STATE <= LED_STATE XOR IO_DATA(9 DOWNTO 0);
-					COMMANDED <= COMMANDED XOR '1';
 				END IF;
 			END IF;
 	END PROCESS;
@@ -62,10 +62,14 @@ BEGIN
 		BEGIN
 			IF RESETN = '0' THEN
 				COUNT <= x"00";
-			ELSIF RISING_EDGE(CLOCK) THEN
-				COUNT <= COUNT + 1;
-				IF COUNT = x"C7" THEN -- full period has passed
-					COUNT <= X"00";
+			ELSE
+				IF MODE = PWM THEN
+					IF RISING_EDGE(CLOCK) THEN
+						COUNT <= COUNT + 1;
+						IF COUNT = x"C7" THEN -- full period has passed
+							COUNT <= X"00";
+						END IF;
+					END IF;
 				END IF;
 			END IF;
 	END PROCESS;
@@ -79,7 +83,7 @@ BEGIN
 --				ENABLE <= "00000000";
 --			ELSIF RISING_EDGE(CLOCK) THEN
 --				IF CS = '1' AND WRITE_EN = '1' THEN
---					ENABLE <= IO_DATA(7 DOWNTO 0);
+--					 <= IO_DATA(7 DOWNTO 0);
 --					BRIGHTNESS <= IO_DATA(9 DOWNTO 8);
 --				END IF;
 --				
@@ -107,7 +111,7 @@ BEGIN
 	-- An output can only be driven from 1 process so remember that!
 	-- For PWM mode, PWM happens if the switch for that LED is enabled/up
 	-- For TOGGLE mode, the result from the XOR operation is applied
-	PROCESS(RESETN, COUNT, ENABLE, GAMMA_LENGTH, COMMANDED)
+	PROCESS(RESETN, COUNT, ENABLE, GAMMA_LENGTH, LED_STATE)
 		BEGIN
 			IF RESETN = '0' THEN
 				LED <= "0000000000";

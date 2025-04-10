@@ -5,6 +5,20 @@ Main:
 	CALL	OuterLoop
 	JUMP	Main
 
+
+
+SingleLoop:
+	LOAD	SingleCounter
+	JZERO	SingleEnd
+	ADDI	-1
+	STORE	SingleCounter
+	JUMP	SingleLoop
+	
+SingleEnd:
+	LOAD	SingleCounterCopy
+	STORE	SingleCounter
+	RETURN
+
 OuterLoop:
 	LOAD	OuterCounter
 	JZERO	End
@@ -29,7 +43,9 @@ End:
 	RETURN
 	
 ; IO address constants
-TestVal: DW	&H402
+TestVal: DW	&H405
+SingleCounter: DW	32000
+SingleCounterCopy: DW 32000
 OuterCounter: DW	1000
 InnerCounter: DW	1000
 Switches:  EQU 000

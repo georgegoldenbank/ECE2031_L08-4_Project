@@ -5,28 +5,38 @@ ADDRESS_RADIX=HEX;
 DATA_RADIX=HEX;
 
 CONTENT BEGIN
-0000: 0814; -- 	LOAD	TestVal
+0000: 081C; -- 	LOAD	TestVal
 0001: 9820; -- 	OUT		NewLEDs
-0002: 8004; -- 	CALL	OuterLoop
+0002: 800C; -- 	CALL	OuterLoop
 0003: 2800; -- 	JUMP	Main
-0004: 0815; -- 	LOAD	OuterCounter
-0005: 400F; -- 	JZERO	End
+0004: 081D; -- 	LOAD	SingleCounter
+0005: 4009; -- 	JZERO	SingleEnd
 0006: 6FFF; -- 	ADDI	-1
-0007: 1015; -- 	STORE	OuterCounter
-0008: BBE8; -- 	LOADI	1000
-0009: 1016; -- 	STORE	InnerCounter
-000A: 0816; -- 	LOAD	InnerCounter
-000B: 4004; -- 	JZERO	OuterLoop
-000C: 6FFF; -- 	ADDI	-1
-000D: 1016; -- 	STORE	InnerCounter
-000E: 280A; -- 	JUMP	InnerLoop
-000F: BBE8; -- 	LOADI	1000
-0010: 1015; -- 	STORE	OuterCounter
-0011: BBE8; -- 	LOADI	1000
-0012: 1016; -- 	STORE	InnerCounter
-0013: 8800; -- 	RETURN
-0014: 0402; -- TestVal: DW	&H402
-0015: 03E8; -- OuterCounter: DW	1000
-0016: 03E8; -- InnerCounter: DW	1000
-[0017..07FF] : 0000; -- [empty memory]
+0007: 101D; -- 	STORE	SingleCounter
+0008: 2804; -- 	JUMP	SingleLoop
+0009: 081E; -- 	LOAD	SingleCounterCopy
+000A: 101D; -- 	STORE	SingleCounter
+000B: 8800; -- 	RETURN
+000C: 081F; -- 	LOAD	OuterCounter
+000D: 4017; -- 	JZERO	End
+000E: 6FFF; -- 	ADDI	-1
+000F: 101F; -- 	STORE	OuterCounter
+0010: BBE8; -- 	LOADI	1000
+0011: 1020; -- 	STORE	InnerCounter
+0012: 0820; -- 	LOAD	InnerCounter
+0013: 400C; -- 	JZERO	OuterLoop
+0014: 6FFF; -- 	ADDI	-1
+0015: 1020; -- 	STORE	InnerCounter
+0016: 2812; -- 	JUMP	InnerLoop
+0017: BBE8; -- 	LOADI	1000
+0018: 101F; -- 	STORE	OuterCounter
+0019: BBE8; -- 	LOADI	1000
+001A: 1020; -- 	STORE	InnerCounter
+001B: 8800; -- 	RETURN
+001C: 0405; -- TestVal: DW	&H405
+001D: 7D00; -- SingleCounter: DW	32000
+001E: 7D00; -- SingleCounterCopy: DW 32000
+001F: 03E8; -- OuterCounter: DW	1000
+0020: 03E8; -- InnerCounter: DW	1000
+[0021..07FF] : 0000; -- [empty memory]
 END;
